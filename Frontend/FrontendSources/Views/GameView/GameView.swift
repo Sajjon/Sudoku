@@ -23,10 +23,16 @@ struct GameView: View {
     let finishedGame: () -> Void
     
     var body: some View {
-        VStack {
+        VStack(alignment: .center, spacing: 20) {
             boardView
             pickNumberView
-            Button("End game", action: finishedGame)
+            Spacer()
+            HStack(alignment: .center) {
+                Spacer()
+                GradientButton("End Game", action: finishedGame)
+                Spacer()
+                
+            }
         }
         .padding()
     }
@@ -79,18 +85,23 @@ private extension GameView {
     var pickNumberView: some View {
         HStack {
             ForEach(Fill.allCases) { fill in
-                Button("\(fill.id)") {
-                    guard let selectedSquare = viewModel.selectedSquare else {
-                        print("no square selected")
-                        return
-                    }
-                    print("Filling square at index: \(selectedSquare.globalIndex) with fill: \(fill == .empty ? "<EMPTY>" : fill.description)")
-                    viewModel.game.fill(square: selectedSquare, with: fill)
+                Button {
+                    viewModel.userDidSelectFill(fill)
+                } label: {
+                    Text("\(fill.value)")
+                        .font(Font.title)
+                        .frame(minWidth: 30, minHeight: 30)
+                        .foregroundColor(.white)
+                        .background(viewModel.isAnySquareSelected ? Color.blue : Color.gray)
+                        .clipShape(Circle())
                 }
             }
+            .disabled(!viewModel.isAnySquareSelected)
+            .aspectRatio(1, contentMode: .fit)
         }
     }
 }
+
 
 extension Fill: Identifiable {}
 public extension Fill {

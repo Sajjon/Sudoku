@@ -15,7 +15,7 @@ struct SetupGameView: View {
             
             Text("Welcome to Sudoku, an awesome game!")
             
-            Button("Start Game") {
+            GradientButton("Start Game") {
                 self.didStartGame(.example)
             }
         }

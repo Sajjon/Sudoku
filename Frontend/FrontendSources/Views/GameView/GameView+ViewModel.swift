@@ -31,4 +31,13 @@ extension GameView.ViewModel {
         }
         return allSquares[idOfSelectedSquare]
     }
+    
+    func userDidSelectFill(_ fill: Fill) {
+        guard let selectedSquare = selectedSquare else { return }
+        game.fill(square: selectedSquare, with: fill)
+    }
+    
+    var isAnySquareSelected: Bool {
+        selectedSquare != nil
+    }
 }

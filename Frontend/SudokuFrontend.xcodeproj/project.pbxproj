@@ -22,6 +22,8 @@
 		48DC209925B434C900F518EE /* SudokuEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 48DC209825B434C900F518EE /* SudokuEngine */; };
 		48DC209F25B4354D00F518EE /* Square+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DC209E25B4354D00F518EE /* Square+Identifiable.swift */; };
 		48DC20A525B4361100F518EE /* Game+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DC20A425B4361100F518EE /* Game+Example.swift */; };
+		48F8B40925B4B4910039DF9B /* Color_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F8B40825B4B4910039DF9B /* Color_Extensions.swift */; };
+		48F8B40E25B4B4BB0039DF9B /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F8B40D25B4B4BB0039DF9B /* GradientButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		48DC209525B4345F00F518EE /* Backend */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Backend; path = ../Backend; sourceTree = "<group>"; };
 		48DC209E25B4354D00F518EE /* Square+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Square+Identifiable.swift"; sourceTree = "<group>"; };
 		48DC20A425B4361100F518EE /* Game+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Game+Example.swift"; sourceTree = "<group>"; };
+		48F8B40825B4B4910039DF9B /* Color_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color_Extensions.swift; sourceTree = "<group>"; };
+		48F8B40D25B4B4BB0039DF9B /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,7 @@
 		48137BDC25B33AC300DF8C8A /* FrontendSources */ = {
 			isa = PBXGroup;
 			children = (
+				48F8B40C25B4B4B00039DF9B /* ViewComponents */,
 				4878430525B437A10070885D /* Extensions */,
 				487842E425B436D10070885D /* Views */,
 				48DC209C25B4353100F518EE /* Model */,
@@ -158,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				4878430625B437AE0070885D /* View_Extensions.swift */,
+				48F8B40825B4B4910039DF9B /* Color_Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -178,6 +184,14 @@
 				4878430125B437940070885D /* AppState.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		48F8B40C25B4B4B00039DF9B /* ViewComponents */ = {
+			isa = PBXGroup;
+			children = (
+				48F8B40D25B4B4BB0039DF9B /* GradientButton.swift */,
+			);
+			path = ViewComponents;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,7 +307,9 @@
 				487842E725B436E10070885D /* GameView.swift in Sources */,
 				487842FC25B4377E0070885D /* SquareView.swift in Sources */,
 				487842F525B437630070885D /* GameOverView.swift in Sources */,
+				48F8B40E25B4B4BB0039DF9B /* GradientButton.swift in Sources */,
 				487842ED25B436EB0070885D /* GameView+ViewModel.swift in Sources */,
+				48F8B40925B4B4910039DF9B /* Color_Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

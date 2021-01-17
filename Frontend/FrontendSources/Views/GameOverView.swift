@@ -11,8 +11,8 @@ struct GameOverView: View {
     let setupNewGame: () -> Void
     var body: some View {
         VStack {
-            Text("Game over")
-            Button("Setup new game", action: setupNewGame)
+            Text("Game over").font(.callout)
+            GradientButton("Setup newgame", action: setupNewGame)
         }
             .navigationTitle("Setup Game")
     }
