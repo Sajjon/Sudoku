@@ -24,6 +24,9 @@ extension GameView.ViewModel {
         game.board.squares
     }
     
+    var numberOfFills: UInt {
+        game.numberOfFills
+    }
     
     var selectedSquare: Square? {
         guard let idOfSelectedSquare = idOfSelectedSquare else {

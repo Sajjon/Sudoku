@@ -7,7 +7,13 @@
 
 import Foundation
 
-public enum Fill: Equatable, CaseIterable, ExpressibleByIntegerLiteral, CustomStringConvertible {
+public enum Fill:
+    Equatable,
+    CaseIterable,
+    ExpressibleByIntegerLiteral,
+    CustomStringConvertible
+{
+    
     case filled(Digit)
     case empty
 }

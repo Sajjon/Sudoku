@@ -22,17 +22,17 @@ struct GameView: View {
     @ObservedObject var viewModel: ViewModel
     let finishedGame: () -> Void
     
+}
+
+extension GameView {
+    
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
+            Text("Number of fills: \(viewModel.numberOfFills)")
             boardView
             pickNumberView
             Spacer()
-            HStack(alignment: .center) {
-                Spacer()
-                GradientButton("End Game", action: finishedGame)
-                Spacer()
-                
-            }
+            GradientButton("End Game", action: finishedGame)
         }
         .padding()
     }

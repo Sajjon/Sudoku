@@ -27,9 +27,6 @@ public struct Board {
         }))
     }
     
-    public static func allSquaresFilled(with fill: Fill) -> Self {
-        .init(squareFills: .init(repeating: fill, count: .sudokuSquareCount))
-    }
 }
 
 internal extension Board {
@@ -39,13 +36,19 @@ internal extension Board {
         square: Square,
         with fill: Fill
     ) {
+
         squares[square.globalIndex] = .init(globalIndex: square.globalIndex, fill: fill)
     }
 }
 
 
 public extension Board {
-    static let empty = allSquaresFilled(with: 3)
+    
+    static func allSquaresFilled(with fill: Fill) -> Self {
+        .init(squareFills: .init(repeating: fill, count: .sudokuSquareCount))
+    }
+    
+    static let empty: Self = .allSquaresFilled(with: .empty)
     
     static let example = Self(squareFills: [
         [0, 0, 0, 0, 0, 0, 8, 0, 0],

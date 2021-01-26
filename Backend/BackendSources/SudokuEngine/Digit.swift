@@ -7,7 +7,13 @@
 
 import Foundation
 
-public enum Digit: Int, Equatable, CaseIterable, ExpressibleByIntegerLiteral, CustomStringConvertible {
+
+public enum Digit: UInt8,
+    Equatable,
+    CaseIterable,
+    ExpressibleByIntegerLiteral,
+    CustomStringConvertible
+{
     case one = 1
     case two, three, four, five, six, seven, eight, nine
 }
@@ -17,7 +23,10 @@ public enum Digit: Int, Equatable, CaseIterable, ExpressibleByIntegerLiteral, Cu
 public extension Digit {
     typealias IntegerLiteralType = RawValue
     init(integerLiteral value: IntegerLiteralType) {
-        self.init(rawValue: value)!
+        guard let digit = Self.init(rawValue: value) else {
+            fatalError("Bad interger literal value: \(value)")
+        }
+        self = digit
     }
 }
 
