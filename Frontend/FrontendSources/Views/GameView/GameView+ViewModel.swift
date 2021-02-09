@@ -21,7 +21,9 @@ extension GameView {
 
 extension GameView.ViewModel {
     var allCells: [Cell] {
-        game.board.cells
+        game.board.regions.flatMap {
+            $0.cells
+        }
     }
     
     var numberOfFills: UInt {
