@@ -9,6 +9,7 @@ import Foundation
 
 public enum Fill:
     Equatable,
+    Hashable,
     CaseIterable,
     ExpressibleByIntegerLiteral,
     CustomStringConvertible
@@ -26,6 +27,17 @@ public extension Fill {
         case .filled(let digit): return digit.rawValue
         }
     }
+    
+    
+    
+    var digit: Digit? {
+        switch self {
+        case .empty: return nil
+        case .filled(let digit): return digit
+        }
+    }
+    
+    
 }
 
 // MARK: ExpressibleByIntegerLiteral

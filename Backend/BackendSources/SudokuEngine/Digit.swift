@@ -10,6 +10,7 @@ import Foundation
 
 public enum Digit: UInt8,
     Equatable,
+    Hashable,
     CaseIterable,
     ExpressibleByIntegerLiteral,
     CustomStringConvertible

@@ -23,10 +23,8 @@ public extension Game {
     mutating func fill(
         cell: Cell,
         with fill: Fill
-    ) {
-        board.fill(cell: cell, with: fill)
+    ) throws {
+        try board.fill(cell: cell, with: fill)
         numberOfFills += 1
-        todo("Implement game logic here")
-        // TODO: Implement game logic here
     }
 }

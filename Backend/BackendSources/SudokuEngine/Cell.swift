@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Cell: Equatable {
+public struct Cell: Equatable, CustomStringConvertible {
     public let regionIndex: Region.Index
     public let indexWithinRegion: Index
     public private(set) var fill: Fill
@@ -48,4 +48,8 @@ public extension Cell {
         regionIndex * .sudokuCellCountPerRegion + indexWithinRegion
     }
     typealias Index = Int
+    
+    var description: String {
+        "indexWithinRegion: \(indexWithinRegion),\nglobal: \(globalIndex),\n fill: \(fill)\n"
+    }
 }

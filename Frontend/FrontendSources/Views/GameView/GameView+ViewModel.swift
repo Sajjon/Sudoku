@@ -39,7 +39,11 @@ extension GameView.ViewModel {
     
     func userDidSelectFill(_ fill: Fill) {
         guard let selectedCell = selectedCell else { return }
-        game.fill(cell: selectedCell, with: fill)
+        do {
+            try game.fill(cell: selectedCell, with: fill)
+        } catch {
+            print("☢️ ERROR: \(error)")
+        }
     }
     
     var isAnyCellSelected: Bool {
