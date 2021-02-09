@@ -11,7 +11,7 @@ import SudokuEngine
 extension GameView {
     final class ViewModel: ObservableObject {
         @Published var game: Game
-        @Published var idOfSelectedSquare: Square.ID?
+        @Published var idOfSelectedCell: Cell.ID?
         
         init(game: Game) {
             self.game = game
@@ -20,27 +20,27 @@ extension GameView {
 }
 
 extension GameView.ViewModel {
-    var allSquares: [Square] {
-        game.board.squares
+    var allCells: [Cell] {
+        game.board.cells
     }
     
     var numberOfFills: UInt {
         game.numberOfFills
     }
     
-    var selectedSquare: Square? {
-        guard let idOfSelectedSquare = idOfSelectedSquare else {
+    var selectedCell: Cell? {
+        guard let idOfSelectedCell = idOfSelectedCell else {
             return nil
         }
-        return allSquares[idOfSelectedSquare]
+        return allCells[idOfSelectedCell]
     }
     
     func userDidSelectFill(_ fill: Fill) {
-        guard let selectedSquare = selectedSquare else { return }
-        game.fill(square: selectedSquare, with: fill)
+        guard let selectedCell = selectedCell else { return }
+        game.fill(cell: selectedCell, with: fill)
     }
     
-    var isAnySquareSelected: Bool {
-        selectedSquare != nil
+    var isAnyCellSelected: Bool {
+        selectedCell != nil
     }
 }

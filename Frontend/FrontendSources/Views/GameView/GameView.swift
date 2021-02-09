@@ -44,23 +44,23 @@ private extension GameView {
             columns: Array(repeating: GridItem(.adaptive(minimum: 50), spacing: 10), count: 9),
             spacing: 5
         ) {
-            ForEach(viewModel.allSquares) { square in
+            ForEach(viewModel.allCells) { cell in
                 VStack {
                     
                     HStack {
-                        SquareView(
-                            square: square,
-                            isSelected: .readonly(viewModel.idOfSelectedSquare == square.id)
+                        CellView(
+                            cell: cell,
+                            isSelected: .readonly(viewModel.idOfSelectedCell == cell.id)
                         )
                         .onTapGesture {
-                            if viewModel.idOfSelectedSquare == square.id {
-                                viewModel.idOfSelectedSquare = nil
+                            if viewModel.idOfSelectedCell == cell.id {
+                                viewModel.idOfSelectedCell = nil
                             } else {
-                                viewModel.idOfSelectedSquare = square.id
+                                viewModel.idOfSelectedCell = cell.id
                             }
                         }
                         
-                        let indexOffsetted = square.globalIndex + 1
+                        let indexOffsetted = cell.globalIndex + 1
                         if indexOffsetted.isMultiple(of: 3) && !indexOffsetted.isMultiple(of: 9) {
                             Rectangle()
                                 .fill(Color.black)
@@ -70,8 +70,8 @@ private extension GameView {
                     
                     
                     if
-                        (square.globalIndex >= 18 && square.globalIndex < 27) ||
-                            (square.globalIndex >= 45 && square.globalIndex < 54)
+                        (cell.globalIndex >= 18 && cell.globalIndex < 27) ||
+                            (cell.globalIndex >= 45 && cell.globalIndex < 54)
                     {
                         Rectangle()
                             .fill(Color.black)
@@ -92,11 +92,11 @@ private extension GameView {
                         .font(Font.title)
                         .frame(minWidth: 30, minHeight: 30)
                         .foregroundColor(.white)
-                        .background(viewModel.isAnySquareSelected ? Color.blue : Color.gray)
+                        .background(viewModel.isAnyCellSelected ? Color.blue : Color.gray)
                         .clipShape(Circle())
                 }
             }
-            .disabled(!viewModel.isAnySquareSelected)
+            .disabled(!viewModel.isAnyCellSelected)
             .aspectRatio(1, contentMode: .fit)
         }
     }

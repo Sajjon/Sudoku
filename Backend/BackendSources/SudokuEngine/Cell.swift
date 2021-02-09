@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct Square: Equatable {
+public struct Cell: Equatable {
     public let globalIndex: Index
     public let fill: Fill
 }
 
-public extension Square {
+public extension Cell {
     typealias Index = Int
 }

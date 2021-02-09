@@ -8,22 +8,22 @@
 import Foundation
 
 private extension Int {
-    static let sudokuSquareCount = 81
+    static let sudokuCellCount = 81
 }
 
 public struct Board {
     
-    public private(set) var squares: [Square]
+    public private(set) var cells: [Cell]
     
-    public init(squares: [Square]) {
-        precondition(squares.count == .sudokuSquareCount)
-        self.squares = squares
+    public init(cells: [Cell]) {
+        precondition(cells.count == .sudokuCellCount)
+        self.cells = cells
     }
     
-    public init(squareFills: [Fill]) {
-        precondition(squareFills.count == .sudokuSquareCount)
-        self.init(squares: squareFills.enumerated().map({ index, fill in
-            Square(globalIndex: index, fill: fill)
+    public init(cellFills: [Fill]) {
+        precondition(cellFills.count == .sudokuCellCount)
+        self.init(cells: cellFills.enumerated().map({ index, fill in
+            Cell(globalIndex: index, fill: fill)
         }))
     }
     
@@ -33,24 +33,24 @@ internal extension Board {
   
     
     mutating func fill(
-        square: Square,
+        cell: Cell,
         with fill: Fill
     ) {
 
-        squares[square.globalIndex] = .init(globalIndex: square.globalIndex, fill: fill)
+        cells[cell.globalIndex] = .init(globalIndex: cell.globalIndex, fill: fill)
     }
 }
 
 
 public extension Board {
     
-    static func allSquaresFilled(with fill: Fill) -> Self {
-        .init(squareFills: .init(repeating: fill, count: .sudokuSquareCount))
+    static func allCellsFilled(with fill: Fill) -> Self {
+        .init(cellFills: .init(repeating: fill, count: .sudokuCellCount))
     }
     
-    static let empty: Self = .allSquaresFilled(with: .empty)
+    static let empty: Self = .allCellsFilled(with: .empty)
     
-    static let example = Self(squareFills: [
+    static let example = Self(cellFills: [
         [0, 0, 0, 0, 0, 0, 8, 0, 0],
         [0, 0, 4, 0, 0, 8, 0, 0, 9],
         [0, 7, 0, 0, 0, 0, 0, 0, 5],

@@ -21,10 +21,10 @@ public struct Game {
 public extension Game {
     
     mutating func fill(
-        square: Square,
+        cell: Cell,
         with fill: Fill
     ) {
-        board.fill(square: square, with: fill)
+        board.fill(cell: cell, with: fill)
         numberOfFills += 1
         todo("Implement game logic here")
         // TODO: Implement game logic here
