@@ -40,45 +40,15 @@ extension GameView {
 
 private extension GameView {
     var boardView: some View {
-        LazyVGrid(
-            columns: Array(repeating: GridItem(.adaptive(minimum: 50), spacing: 10), count: 9),
-            spacing: 5
-        ) {
-            ForEach(viewModel.allCells) { cell in
-                VStack {
-                    
-                    HStack {
-                        CellView(
-                            cell: cell,
-                            isSelected: .readonly(viewModel.idOfSelectedCell == cell.id)
-                        )
-                        .onTapGesture {
-                            if viewModel.idOfSelectedCell == cell.id {
-                                viewModel.idOfSelectedCell = nil
-                            } else {
-                                viewModel.idOfSelectedCell = cell.id
-                            }
-                        }
-                        
-                        let indexOffsetted = cell.globalIndex + 1
-                        if indexOffsetted.isMultiple(of: 3) && !indexOffsetted.isMultiple(of: 9) {
-                            Rectangle()
-                                .fill(Color.black)
-                                .frame(width: 2)
-                        }
-                    }
-                    
-                    
-                    if
-                        (cell.globalIndex >= 18 && cell.globalIndex < 27) ||
-                            (cell.globalIndex >= 45 && cell.globalIndex < 54)
-                    {
-                        Rectangle()
-                            .fill(Color.black)
-                            .frame(height: 2)
-                    }
-                }
-            }
+        BoardView(
+            viewModel.regions,
+            spaceBetweenRows: 10,
+            gridItem: GridItem(.flexible(minimum: 100), spacing: 10)
+        ) { region in
+            RegionView(
+                region: region,
+                toggleCellSelected: $viewModel.idOfSelectedCell
+            )
         }
     }
     

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Region: Equatable {
+public struct Region: Equatable, Identifiable {
     public let index: Index
     public private(set) var cells: [Cell]
     
@@ -24,7 +24,7 @@ internal extension Region {
         cellsCopy.updateElement(at: index) { cell in
             cell.fill(with: fill)
         }
-        self.cells = try checkForDuplicateDigits(in: cellsCopy, scope: .region)
+        self.cells = try checkForDuplicateDigits(in: cellsCopy, scope: .region(index))
     }
 }
 
@@ -32,4 +32,10 @@ public extension Region {
     typealias Index = Array<Cell>.Index
     
     
+}
+
+// MARK: Identifiable
+public extension Region {
+    typealias ID = Index
+    var id: ID { index }
 }

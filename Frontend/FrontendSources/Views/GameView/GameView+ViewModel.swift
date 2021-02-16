@@ -20,10 +20,8 @@ extension GameView {
 }
 
 extension GameView.ViewModel {
-    var allCells: [Cell] {
-        game.board.regions.flatMap {
-            $0.cells
-        }
+    var regions: [Region] {
+        game.board.regions
     }
     
     var numberOfFills: UInt {
@@ -34,7 +32,7 @@ extension GameView.ViewModel {
         guard let idOfSelectedCell = idOfSelectedCell else {
             return nil
         }
-        return allCells[idOfSelectedCell]
+        return allCells.first(where: { $0.id == idOfSelectedCell })
     }
     
     func userDidSelectFill(_ fill: Fill) {
@@ -49,4 +47,12 @@ extension GameView.ViewModel {
     var isAnyCellSelected: Bool {
         selectedCell != nil
     }
+}
+
+private extension GameView.ViewModel {
+        var allCells: [Cell] {
+            regions.flatMap {
+                $0.cells
+            }
+        }
 }

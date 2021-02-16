@@ -18,7 +18,10 @@ struct CellView: View {
         Rectangle()
             .fill(Color.white)
             .aspectRatio(1, contentMode: .fill)
-            .border(isSelected ? Color.red : Color.orange, width: isSelected ? 2 : 1)
+            .border(
+                isSelected ? Color.red : .orange,
+                width: isSelected ? 2 : 1
+            )
             
             Text("\(cell.fill.description)")
         }
