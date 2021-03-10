@@ -24,14 +24,15 @@ internal extension Region {
         cellsCopy.updateElement(at: index) { cell in
             cell.fill(with: fill)
         }
-        self.cells = try checkForDuplicateDigits(in: cellsCopy, scope: .region(index))
+        self.cells = try checkForDuplicateDigits(in: cellsCopy, scope: .region)
     }
 }
 
 public extension Region {
     typealias Index = Array<Cell>.Index
     
-    
+    static let rowCount = 3
+    static let columnCount = 3
 }
 
 // MARK: Identifiable

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Cell: Equatable, CustomStringConvertible {
+public struct Cell: Equatable, Hashable, CustomStringConvertible {
     public let regionIndex: Region.Index
     public let indexWithinRegion: Index
     public private(set) var fill: Fill
@@ -41,9 +41,23 @@ internal extension Cell {
         self.fill = fill
     }
 
+    
 }
 
 public extension Cell {
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.globalIndex == rhs.globalIndex
+    }
+    
+    var rowIndex: Index {
+        indexWithinRegion.quotientAndRemainder(dividingBy: 3).quotient
+    }
+    
+    var columnIndex: Index {
+        indexWithinRegion.quotientAndRemainder(dividingBy: 3).remainder
+    }
+    
     var globalIndex: Index {
         regionIndex * .sudokuCellCountPerRegion + indexWithinRegion
     }
