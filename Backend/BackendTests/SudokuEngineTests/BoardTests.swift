@@ -5,15 +5,14 @@ final class BoardTests: XCTestCase {
         
     func testRegionViewGlobalIndexIsIncrementedWithinRegionFirst() {
         let board = Board.empty
-        let globalIndices: [Int] = board.regions.flatMap({ $0.cells.map({ $0.globalIndex }) })
-        func doTest(windowOfSize2: Array<Int>.SubSequence) {
-            let globalIndices = Array(windowOfSize2)
-            XCTAssertEqual(globalIndices.count, 2)
-            let first = globalIndices[0]
-            let second = globalIndices[1]
-            XCTAssertEqual(second - first, 1)
-        }
-        globalIndices.windows(ofCount: 2).forEach(doTest)
+        
+        assertThatCells(in: board, view: \.regions)
+        
+    }
+    
+    func testRowViewGlobalIndexIsIncrementedWithinRowFirst() {
+        let board = Board.empty
+        assertThatCells(in: board, view: \.rows)
     }
     
     func testThatEveryRegionConsistsOf9Cells() {
@@ -35,5 +34,31 @@ final class BoardTests: XCTestCase {
             board.regions.map({ $0.cells.count }).reduce(0, +),
             81
         )
+    }
+}
+
+
+private extension BoardTests {
+
+    func assertThatCells<View>(
+        in board: Board,
+        view viewKeyPath: KeyPath<Board, View>
+    ) where View: Collection, View.Element: CellCollection {
+        let view: View = board[keyPath: viewKeyPath]
+        let cellMatrix: [[Cell]] = view.map { $0.cells }
+        return assertThatIndexOfCellsAreStrictlyIncrementedByOne(cellMatrix: cellMatrix)
+    }
+    
+    func assertThatIndexOfCellsAreStrictlyIncrementedByOne(cellMatrix: [[Cell]]) {
+        let globalIndices: [Int] = cellMatrix.flatMap({ $0.map({ $0.globalIndex }) })
+        XCTAssertEqual(globalIndices.count, 81)
+        func doTest(windowOfSize2: Array<Int>.SubSequence) {
+            let globalIndices = Array(windowOfSize2)
+            XCTAssertEqual(globalIndices.count, 2)
+            let first = globalIndices[0]
+            let second = globalIndices[1]
+            XCTAssertEqual(second - first, 1)
+        }
+        globalIndices.windows(ofCount: 2).forEach(doTest)
     }
 }

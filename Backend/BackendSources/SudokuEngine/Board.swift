@@ -40,6 +40,13 @@ public struct Board {
     
 }
 
+public extension Board {
+    
+    var rows: [Row] {
+        []
+    }
+}
+
 
 //private enum ScopeToCheck: Int, Equatable {
 //    case column, row, region
@@ -56,19 +63,19 @@ internal extension Board {
         let rows = row(of: cell)
         let region = regions[cell.regionIndex].cells
         
-        let cellCollectionsToCheckForDuplicates: [(cells: [Cell], scopeToCheck: Scope)] = [
-            (cells: columns, scopeToCheck: .column),
-            (cells: rows, scopeToCheck: .row),
-            (cells: region, scopeToCheck: .region)
-        ]
-        
-        for cellCollectionToCheck in cellCollectionsToCheckForDuplicates {
-            print("🔮 cell indices: \(cellCollectionToCheck.cells.map({ $0.globalIndex })), scope: \(cellCollectionToCheck.scopeToCheck.rawValue)")
-            try checkForDuplicateDigits(
-                in: cellCollectionToCheck.cells,
-                scope: cellCollectionToCheck.scopeToCheck
-            )
-        }
+//        let cellCollectionsToCheckForDuplicates: [(cells: [Cell], scopeToCheck: Scope)] = [
+//            (cells: columns, scopeToCheck: .column),
+//            (cells: rows, scopeToCheck: .row),
+//            (cells: region, scopeToCheck: .region)
+//        ]
+//
+//        for cellCollectionToCheck in cellCollectionsToCheckForDuplicates {
+//            print("🔮 cell indices: \(cellCollectionToCheck.cells.map({ $0.globalIndex })), scope: \(cellCollectionToCheck.scopeToCheck.rawValue)")
+//            try checkForDuplicateDigits(
+//                in: cellCollectionToCheck.cells,
+//                scope: cellCollectionToCheck.scopeToCheck
+//            )
+//        }
         
         try fillCell(in: cell.regionIndex, at: cell.indexWithinRegion, with: fill)
     }
@@ -154,12 +161,13 @@ private extension Board {
     
     func row(of cell: Cell) -> Row {
         
-        let rows = regions.row(
-            indexOfSelectedElement: cell.regionIndex,
-            boundedBy: Self.rowCount
-        )
-        
-        return rows.flatMap { region in region.cellsInSameRowAs(rowIndex: cell.rowIndex) }
+//        let rows = regions.row(
+//            indexOfSelectedElement: cell.regionIndex,
+//            boundedBy: Self.rowCount
+//        )
+//
+//        return rows.flatMap { region in region.cellsInSameRowAs(rowIndex: cell.rowIndex) }
+        fatalError()
     }
     
     mutating func fillCell(
@@ -176,7 +184,6 @@ private extension Board {
 
 public extension Board {
     typealias Column = [Cell]
-    typealias Row = [Cell]
     
     static func allCellsFilled(with fill: Fill) -> Self {
         .init(cellFills: .init(repeating: fill, count: .sudokuCellCount))

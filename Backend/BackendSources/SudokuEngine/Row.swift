@@ -2,23 +2,18 @@
 //  File.swift
 //  
 //
-//  Created by Alexander Cyon on 2021-02-09.
+//  Created by Alexander Cyon on 2021-04-14.
 //
 
 import Foundation
 
-public struct Region: CellCollection, Equatable, Identifiable {
+public struct Row: CellCollection, Equatable, Identifiable {
     public let index: Index
     public private(set) var cells: [Cell]
 }
 
-public extension Region {
-
-    
+public extension Row {
     mutating func unsafeSetCells(newCells: [Cell]) {
         self.cells = newCells
     }
-    static let rowCount = 3
-    static let columnCount = 3
 }
-

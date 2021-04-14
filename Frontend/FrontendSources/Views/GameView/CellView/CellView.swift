@@ -23,7 +23,8 @@ struct CellView: View {
                 width: isSelected ? 2 : 1
             )
             
-            Text("\(cell.fill.description)")
+            Text("\(cell.globalIndex)")
+//            Text("\(cell.fill.description)")
         }
     }
     
