@@ -1,5 +1,7 @@
 .DS_Store
 /.build
+Backend/.build
+**/xcuserdata/
 /Packages
 
 # Xcode
