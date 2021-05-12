@@ -35,6 +35,18 @@ final class BoardTests: XCTestCase {
             81
         )
     }
+    
+    func testApaTestarBananer() {
+        let board = Board.empty
+        let region0 = board.regions[0]
+        let r0c0 = region0.cellsInSameColumnAs(columnIndex: 0)
+        XCTAssertEqual(r0c0.map{$0.globalIndex}, [0,3,6])
+        let region2 = board.regions[2]
+        let r2c2 = region2.cellsInSameColumnAs(columnIndex: 2)
+        XCTAssertEqual(r2c2.map{$0.globalIndex}, [20,23,26])
+        let r2r1 = region2.cellsInSameRowAs(rowIndex: 1) //.cellsInSameColumnAs(columnIndex: 2)
+        XCTAssertEqual(r2r1.map{$0.globalIndex}, [21,22,23])
+    }
 }
 
 

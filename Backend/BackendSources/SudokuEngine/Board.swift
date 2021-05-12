@@ -59,8 +59,8 @@ internal extension Board {
         cell: Cell,
         with fill: Fill
     ) throws {
-        let columns = column(of: cell)
-        let rows = row(of: cell)
+        let column = column(of: cell)
+        let row = row(of: cell)
         let region = regions[cell.regionIndex].cells
         
 //        let cellCollectionsToCheckForDuplicates: [(cells: [Cell], scopeToCheck: Scope)] = [
@@ -94,16 +94,23 @@ extension Array where Element: Equatable {
         boundedBy bound: Index,
         keyPath: KeyPath<(quotient: Int, remainder: Int), Int>
     ) -> [Element] {
-        
+            
         let indexOfSelectedElementQR = indexOfSelectedElement.quotientAndRemainder(dividingBy: bound)
         let indexOfSelectedElementQoR = indexOfSelectedElementQR[keyPath: keyPath]
         
         let indices = enumerated()
-            .map({ $0.offset })
-            .map({ $0.quotientAndRemainder(dividingBy: bound) })
-            .map({ $0[keyPath: keyPath] })
-            .filter({ $0 == indexOfSelectedElementQoR })
-        
+            .map { (offset: Int, element: Element) in
+                return offset
+            }
+            .compactMap({ (offset: Int) -> Int? in
+                let qr = offset.quotientAndRemainder(dividingBy: bound)
+                let value = qr[keyPath: keyPath]
+                let match = value == indexOfSelectedElementQoR
+                guard match else {  return nil }
+                return offset
+            })
+
+
         return indices.map { self[$0] }
     }
     
