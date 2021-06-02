@@ -50,17 +50,24 @@ public extension Cell {
         lhs.globalIndex == rhs.globalIndex
     }
     
-    var rowIndex: Index {
+    var rowIndexWithinRegion: Index {
         indexWithinRegion.quotientAndRemainder(dividingBy: 3).quotient
     }
     
-    var columnIndex: Index {
+    var columnIndexWithinRegion: Index {
         indexWithinRegion.quotientAndRemainder(dividingBy: 3).remainder
     }
     
     var globalIndex: Index {
         regionIndex * .sudokuCellCountPerRegion + indexWithinRegion
     }
+    
+    var globalColumnIndex: Index {
+        let numberOfRegionsPerRowInBoard = 3
+        let numberOfColumnsPerRegion = 3
+        return (regionIndex % numberOfRegionsPerRowInBoard) * numberOfColumnsPerRegion + columnIndexWithinRegion
+    }
+    
     typealias Index = Int
     
     var description: String {

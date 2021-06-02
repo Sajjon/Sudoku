@@ -40,12 +40,34 @@ public struct Board {
     
 }
 
-public extension Board {
-    
-    var rows: [Row] {
-        []
-    }
-}
+//public extension Board {
+//
+//
+//    func regionsForRow(at rowIndex: Int) -> [Region] {
+//
+//        rowIndex.quotientAndRemainder(dividingBy: Board)
+//
+//        let lowerRegionIndex = 0 // FIXME calculate this
+//        let upperRegionIndex = 0 // FIXME calculate this
+//
+//        return (lowerRegionIndex..<upperRegionIndex).map({ regionIndex in
+//            self.regions[regionIndex]
+//        })
+//    }
+//
+//    var rows: [Row] {
+//        let rows: [Row] = (0..<Board.rowCount).map({ (rowIndex: Int) -> Row in
+//            let regions = regionsForRow(at: rowIndex)
+//            let cells: [Cell] = regions.flatMap({ (region: Region) -> [Cell] in
+//                region.cellsInSameRowAs(rowIndex: rowIndex)
+//            })
+//
+//            return Row(index: rowIndex, cells: cells)
+//        })
+//
+//        return rows
+//    }
+//}
 
 
 //private enum ScopeToCheck: Int, Equatable {
@@ -77,7 +99,7 @@ internal extension Board {
 //            )
 //        }
         
-        try fillCell(in: cell.regionIndex, at: cell.indexWithinRegion, with: fill)
+//        try fillCell(in: cell.regionIndex, at: cell.indexWithinRegion, with: fill)
     }
     
 }
@@ -94,10 +116,7 @@ extension Array where Element: Equatable {
         boundedBy bound: Index,
         keyPath: KeyPath<(quotient: Int, remainder: Int), Int>
     ) -> [Element] {
-            
-        let indexOfSelectedElementQR = indexOfSelectedElement.quotientAndRemainder(dividingBy: bound)
-        let indexOfSelectedElementQoR = indexOfSelectedElementQR[keyPath: keyPath]
-        
+
         let indices = enumerated()
             .map { (offset: Int, element: Element) in
                 return offset
@@ -105,11 +124,10 @@ extension Array where Element: Equatable {
             .compactMap({ (offset: Int) -> Int? in
                 let qr = offset.quotientAndRemainder(dividingBy: bound)
                 let value = qr[keyPath: keyPath]
-                let match = value == indexOfSelectedElementQoR
-                guard match else {  return nil }
+                let match = value == indexOfSelectedElement
+                guard match else { return nil }
                 return offset
             })
-
 
         return indices.map { self[$0] }
     }
@@ -148,22 +166,29 @@ extension Region {
     }
 }
 
-private extension Board {
+internal extension Board {
     
     /// The number of region collections vertically stacked on the board.
-    static let rowCount = 3
+    static let numberOfRegionsStackedVerticallyOnBoard = 3
     
     /// The number of region collections horizontally aligned on the board.
-    static let columnCount = 3
+    static let numberOfRegionsStackedHorizontallyOnBoard = 3
     
     func column(of cell: Cell) -> Column {
         
-        let columns = regions.column(
-            indexOfSelectedElement: cell.regionIndex,
-            boundedBy: Self.columnCount
+        let columnIndex = cell.globalColumnIndex
+        let columnsOfRegions: [Region] = regions.column(
+            indexOfSelectedElement: columnIndex,
+            boundedBy: Self.numberOfRegionsStackedHorizontallyOnBoard
         )
         
-        return columns.flatMap { region in region.cellsInSameColumnAs(columnIndex: cell.columnIndex) }
+        
+        let cells = columnsOfRegions
+            .flatMap({ (region) -> [Cell] in
+                return region.cellsInSameColumnAs(columnIndex: cell.columnIndexWithinRegion)
+            })
+        
+        return Column(index: columnIndex, cells: cells)
     }
     
     func row(of cell: Cell) -> Row {
@@ -190,7 +215,6 @@ private extension Board {
 }
 
 public extension Board {
-    typealias Column = [Cell]
     
     static func allCellsFilled(with fill: Fill) -> Self {
         .init(cellFills: .init(repeating: fill, count: .sudokuCellCount))
