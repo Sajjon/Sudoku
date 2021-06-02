@@ -185,6 +185,7 @@ final class BoardTests: XCTestCase {
         XCTAssertEqual(c15.globalIndex, 15)
         let c15Column = board.column(of: c15)
         XCTAssertEqual(c15Column.index, 3)
+        // Fortsätt här
         XCTAssertEqual(c15Column.cells.count, 9)
         XCTAssertTrue(c15Column.cells.allSatisfy({ $0.globalColumnIndex == 3 }))
         XCTAssertEqual(c15Column.cells.map({ $0.globalColumnIndex }), [9, 12, 15, 36, 39, 42, 63, 66, 69])
