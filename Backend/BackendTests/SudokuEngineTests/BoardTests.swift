@@ -12,6 +12,16 @@ extension Collection where Self.Iterator.Element: RandomAccessCollection {
     }
 }
 
+extension Board {
+    /// O(n) 😱 but hey, we don't expect THAT big a board...
+    func findCell(
+        withGlobalIndex targetCellGlobalIndex: Int
+    ) -> Cell? {
+        let allCells = regions.flatMap({ $0.cells })
+        return allCells.first(where: { $0.globalIndex == targetCellGlobalIndex })
+    }
+}
+
 final class BoardTests: XCTestCase {
     
     func testRegionViewGlobalIndexIsIncrementedWithinRegionFirst() {
@@ -21,10 +31,10 @@ final class BoardTests: XCTestCase {
         
     }
     
-//    func testRowViewGlobalIndexIsIncrementedWithinRowFirst() {
-//        let board = Board.empty
-//        assertThatCells(in: board, view: \.rows)
-//    }
+    //    func testRowViewGlobalIndexIsIncrementedWithinRowFirst() {
+    //        let board = Board.empty
+    //        assertThatCells(in: board, view: \.rows)
+    //    }
     
     func testThatEveryRegionConsistsOf9Cells() {
         let board = Board.empty
@@ -97,7 +107,7 @@ final class BoardTests: XCTestCase {
                     )
                 })
         }
-
+        
         func assertThatGlobalIndicesForEachRowAndColumn(
             in region: RegionIndex,
             equals expectedGlobalIndicesForRow: [[Cell.Index]]
@@ -141,7 +151,7 @@ final class BoardTests: XCTestCase {
                 [24, 25, 26]
             ]
         )
-     
+        
         assertThatGlobalIndicesForEachRowAndColumn(
             in: .region(3),
             equals: [
@@ -159,7 +169,7 @@ final class BoardTests: XCTestCase {
                 [78, 79, 80]
             ]
         )
-
+        
     }
     func testTranspose() {
         let matrix = [
@@ -172,23 +182,56 @@ final class BoardTests: XCTestCase {
         XCTAssertEqual(
             matrix.transposed(),
             [
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8]
-        ]
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8]
+            ]
         )
     }
     
-    func testApa() throws {
-        let board = Board.empty
-        let c15 = try XCTUnwrap(board.regions[1].cells.first(where: { $0.globalIndex == 15 }))
-        XCTAssertEqual(c15.globalIndex, 15)
-        let c15Column = board.column(of: c15)
-        XCTAssertEqual(c15Column.index, 3)
-        // Fortsätt här
-        XCTAssertEqual(c15Column.cells.count, 9)
-        XCTAssertTrue(c15Column.cells.allSatisfy({ $0.globalColumnIndex == 3 }))
-        XCTAssertEqual(c15Column.cells.map({ $0.globalColumnIndex }), [9, 12, 15, 36, 39, 42, 63, 66, 69])
+    
+    func test_get_all_other_cells_in_the_same_board_column_as_a_given_cell() throws {
+        
+        func doTest(
+            targetCellGlobalIndex: Int,
+            expectedColumnIndex: Int,
+            expectedCellIndicies: [Int]
+        ) throws {
+            
+            let board = Board.empty
+            // GIVEN a cell
+            let targetCell = try XCTUnwrap(board.findCell(withGlobalIndex: targetCellGlobalIndex))
+            XCTAssertEqual(targetCell.globalIndex, targetCellGlobalIndex)
+            // WHEN we query cells in same column as that cell
+            let columnOfTargetCell = board.column(of: targetCell)
+            XCTAssertEqual(columnOfTargetCell.index, expectedColumnIndex)
+            XCTAssertEqual(columnOfTargetCell.cells.count, 9)
+            XCTAssertTrue(columnOfTargetCell.cells.allSatisfy({ $0.globalColumnIndex == expectedColumnIndex }))
+            // THEN we can assert their global indices.
+            XCTAssertEqual(columnOfTargetCell.cells.map({ $0.globalIndex }), expectedCellIndicies)
+            
+            
+        }
+        try doTest(
+            targetCellGlobalIndex: 15,
+            expectedColumnIndex: 3,
+            expectedCellIndicies: [9, 12, 15, 36, 39, 42, 63, 66, 69]
+        )
+        try doTest(
+            targetCellGlobalIndex: 23,
+            expectedColumnIndex: 8,
+            expectedCellIndicies: [20, 23, 26, 47, 50, 53, 74, 77, 80]
+        )
+        try doTest(
+            targetCellGlobalIndex: 62,
+            expectedColumnIndex: 2,
+            expectedCellIndicies: [2, 5, 8, 29, 32, 35, 56, 59, 62]
+        )
+        try doTest(
+            targetCellGlobalIndex: 31,
+            expectedColumnIndex: 1,
+            expectedCellIndicies: [1, 4, 7, 28, 31, 34, 55, 58, 61]
+        )
         
     }
 }

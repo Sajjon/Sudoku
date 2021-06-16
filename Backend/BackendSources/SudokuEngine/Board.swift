@@ -124,7 +124,7 @@ extension Array where Element: Equatable {
             .compactMap({ (offset: Int) -> Int? in
                 let qr = offset.quotientAndRemainder(dividingBy: bound)
                 let value = qr[keyPath: keyPath]
-                let match = value == indexOfSelectedElement
+                let match = value == indexOfSelectedElement % bound
                 guard match else { return nil }
                 return offset
             })
@@ -176,17 +176,19 @@ internal extension Board {
     
     func column(of cell: Cell) -> Column {
         
-        let columnIndex = cell.globalColumnIndex
-        let columnsOfRegions: [Region] = regions.column(
-            indexOfSelectedElement: columnIndex,
+        let regionIndex = cell.regionIndex
+        let columnOfRegions: [Region] = regions.column(
+            indexOfSelectedElement: regionIndex,
             boundedBy: Self.numberOfRegionsStackedHorizontallyOnBoard
         )
         
         
-        let cells = columnsOfRegions
+        let cells = columnOfRegions
             .flatMap({ (region) -> [Cell] in
                 return region.cellsInSameColumnAs(columnIndex: cell.columnIndexWithinRegion)
             })
+        
+        let columnIndex = cell.globalColumnIndex
         
         return Column(index: columnIndex, cells: cells)
     }
