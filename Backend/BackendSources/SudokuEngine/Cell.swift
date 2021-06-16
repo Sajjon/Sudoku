@@ -65,7 +65,14 @@ public extension Cell {
     var globalColumnIndex: Index {
         let numberOfRegionsPerRowInBoard = 3
         let numberOfColumnsPerRegion = 3
-        return (regionIndex % numberOfRegionsPerRowInBoard) * numberOfColumnsPerRegion + columnIndexWithinRegion
+        return regionIndex.quotientAndRemainder(dividingBy: numberOfRegionsPerRowInBoard).remainder * numberOfColumnsPerRegion + columnIndexWithinRegion
+        
+//        return (regionIndex % numberOfRegionsPerRowInBoard) * numberOfColumnsPerRegion + columnIndexWithinRegion
+    }
+    var globalRowIndex: Index {
+        let numberOfRegionsPerRowInBoard = 3
+        let numberOfRowsPerRegion = 3
+        return regionIndex.quotientAndRemainder(dividingBy: numberOfRegionsPerRowInBoard).quotient * numberOfRowsPerRegion + rowIndexWithinRegion
     }
     
     typealias Index = Int

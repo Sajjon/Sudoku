@@ -68,19 +68,21 @@ final class BoardTests: XCTestCase {
         func assertThatGlobalIndicesOfCells(
             in regionAtIndex: RegionIndex,
             at columnOrRow: ColumnOrRowIndex,
-            equals expectedGlobalIndices: [Cell.Index]
+            equals expectedGlobalIndices: [Cell.Index],
+            _ line: UInt = #line
         ) {
             let regionIndex = regionAtIndex.index
             let region = board.regions[regionIndex]
             let adjacentCells = columnOrRow.adjecentCells(in: region)
             let globalIndices = adjacentCells.map{ $0.globalIndex }
-            XCTAssertEqual(globalIndices, expectedGlobalIndices)
+            XCTAssertEqual(globalIndices, expectedGlobalIndices, line: line)
             
         }
         
         func assertThatGlobalIndicesForEachRow(
             in regionAtIndex: RegionIndex,
-            equals expectedGlobalIndicesPerRow: [[Cell.Index]]
+            equals expectedGlobalIndicesPerRow: [[Cell.Index]],
+            _ line: UInt = #line
         ) {
             expectedGlobalIndicesPerRow
                 .enumerated()
@@ -88,14 +90,16 @@ final class BoardTests: XCTestCase {
                     assertThatGlobalIndicesOfCells(
                         in: regionAtIndex,
                         at: .row(rowIndex),
-                        equals: expectedGlobalIndices
+                        equals: expectedGlobalIndices,
+                        line
                     )
                 })
         }
         
         func assertThatGlobalIndicesForEachColumn(
             in regionAtIndex: RegionIndex,
-            equals expectedGlobalIndicesPerColumn: [[Cell.Index]]
+            equals expectedGlobalIndicesPerColumn: [[Cell.Index]],
+            _ line: UInt = #line
         ) {
             expectedGlobalIndicesPerColumn
                 .enumerated()
@@ -103,25 +107,29 @@ final class BoardTests: XCTestCase {
                     assertThatGlobalIndicesOfCells(
                         in: regionAtIndex,
                         at: .column(columnIndex),
-                        equals: expectedGlobalIndices
+                        equals: expectedGlobalIndices,
+                        line
                     )
                 })
         }
         
         func assertThatGlobalIndicesForEachRowAndColumn(
             in region: RegionIndex,
-            equals expectedGlobalIndicesForRow: [[Cell.Index]]
+            equals expectedGlobalIndicesForRow: [[Cell.Index]],
+            _ line: UInt = #line
         ) {
             
             
             assertThatGlobalIndicesForEachRow(
                 in: region,
-                equals: expectedGlobalIndicesForRow
+                equals: expectedGlobalIndicesForRow,
+                line
             )
             
             assertThatGlobalIndicesForEachColumn(
                 in: region,
-                equals: expectedGlobalIndicesForRow.transposed()
+                equals: expectedGlobalIndicesForRow.transposed(),
+                line
             )
         }
         
@@ -189,6 +197,46 @@ final class BoardTests: XCTestCase {
         )
     }
     
+
+    func test_get_all_other_cells_in_the_same_board_row_as_a_given_cell() throws {
+        
+        func doTest(
+            targetCellGlobalIndex: Int,
+            expectedRowIndex: Int,
+            expectedCellIndicies: [Int]
+        ) throws {
+            
+            let board = Board.empty
+            // GIVEN a cell
+            let targetCell = try XCTUnwrap(board.findCell(withGlobalIndex: targetCellGlobalIndex))
+            XCTAssertEqual(targetCell.globalIndex, targetCellGlobalIndex)
+            // WHEN we query cells in same column as that cell
+            let rowOfTargetCell = board.row(of: targetCell)
+            XCTAssertEqual(rowOfTargetCell.index, expectedRowIndex)
+            XCTAssertEqual(rowOfTargetCell.cells.count, 9)
+            TODO fortsatt har blir fel row
+            XCTAssertEqual(rowOfTargetCell.cells.map({ $0.globalRowIndex }), [Int](repeating: expectedRowIndex, count: 9))
+            // THEN we can assert their global indices.
+            XCTAssertEqual(rowOfTargetCell.cells.map({ $0.globalIndex }), expectedCellIndicies)
+            
+        }
+        
+        try doTest(
+            targetCellGlobalIndex: 0,
+            expectedRowIndex: 0,
+            expectedCellIndicies: [0, 1, 2, 9, 10, 11, 18, 19, 20]
+        )
+        try doTest(
+            targetCellGlobalIndex: 60,
+            expectedRowIndex: 8,
+            expectedCellIndicies: [60, 61, 62, 69, 70, 71, 78, 79, 80]
+        )
+        try doTest(
+            targetCellGlobalIndex: 42,
+            expectedRowIndex: 5,
+            expectedCellIndicies: [33, 34, 35, 42, 43, 44, 51, 52, 53]
+        )
+    }
     
     func test_get_all_other_cells_in_the_same_board_column_as_a_given_cell() throws {
         
@@ -231,6 +279,11 @@ final class BoardTests: XCTestCase {
             targetCellGlobalIndex: 31,
             expectedColumnIndex: 1,
             expectedCellIndicies: [1, 4, 7, 28, 31, 34, 55, 58, 61]
+        )
+        try doTest(
+            targetCellGlobalIndex: 80,
+            expectedColumnIndex: 8,
+            expectedCellIndicies: [20, 23, 26, 47, 50, 53, 74, 77, 80]
         )
         
     }

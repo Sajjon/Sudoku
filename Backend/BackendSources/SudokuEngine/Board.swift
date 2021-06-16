@@ -125,6 +125,10 @@ extension Array where Element: Equatable {
                 let qr = offset.quotientAndRemainder(dividingBy: bound)
                 let value = qr[keyPath: keyPath]
                 let match = value == indexOfSelectedElement % bound
+                modulus här blir fel för ROW, men funkar för column, men lösningen nedan med QR och keypath blir också fel. Något saknas?
+//                let qrSelected = indexOfSelectedElement.quotientAndRemainder(dividingBy: bound)
+//                let expected = qrSelected[keyPath: keyPath]
+//                let match = value == expected
                 guard match else { return nil }
                 return offset
             })
@@ -195,13 +199,23 @@ internal extension Board {
     
     func row(of cell: Cell) -> Row {
         
-//        let rows = regions.row(
-//            indexOfSelectedElement: cell.regionIndex,
-//            boundedBy: Self.rowCount
-//        )
-//
-//        return rows.flatMap { region in region.cellsInSameRowAs(rowIndex: cell.rowIndex) }
-        fatalError()
+        let regionIndex = cell.regionIndex
+        let rowIndex = cell.globalRowIndex
+
+        let rowOfRegions: [Region] = regions.row(
+            indexOfSelectedElement: regionIndex,
+            boundedBy: Self.numberOfRegionsStackedVerticallyOnBoard
+        )
+        
+        print("rowOfRegions: \(rowOfRegions)")
+        
+        let cells = rowOfRegions
+            .flatMap({ (region) -> [Cell] in
+                return region.cellsInSameRowAs(rowIndex: cell.rowIndexWithinRegion)
+            })
+        
+        
+        return Row(index: rowIndex, cells: cells)
     }
     
     mutating func fillCell(
